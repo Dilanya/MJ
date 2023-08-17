@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MJ</title>
+  <link rel="stylesheet" href="styles.css"> 
+</head>
+<body>
+  <div id="view">
+    <form id="upload-form">
+      <div id="row">
+        <input type="text" id="url-input" placeholder="Image URL"> 
+        <button type="button" id="upload-button">Upload</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlInput = document.getElementById("url-input");
+      const uploadButton = document.getElementById("upload-button");
+
+      
+      uploadButton.addEventListener("click", () => {
+        let imageUrl = urlInput.value;
+
+        if (imageUrl.trim() !== "") {
+          axios
+            .post("http://localhost:3000/", { imageUrl }) 
+            .then(function (response) {
+              console.log(JSON.stringify(response.data));
+              
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        }
+      });
+    })
+  </script>
+</body>
+</html>
