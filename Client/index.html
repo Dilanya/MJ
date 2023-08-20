@@ -10,35 +10,58 @@
   <div id="view">
     <form id="upload-form">
       <div id="row">
-        <input type="text" id="url-input" placeholder="Image URL"> 
+        <label>
+        <input type="file" name="image" id="image" accept="image/*" required>
+        <input type="text" name="prompt" placeholder="Optional prompt">
         <button type="button" id="upload-button">Upload</button>
+        <div id="progressContainer" >
+          <p>Processing progress:</p>
+          <progress id="progressBar" value="0" max="100"></progress>
+          <p id="progressText">0%</p>
+        </div>
+        <div id="responseContainer" style="display: none;">
+          <p>Image Processed Successfully!</p>
+          <img id="processedImage" src="" alt="Processed Image">
+          <p>Image URL: <span id="imageUrl"></span></p>
+        </div>
       </div>
     </form>
-  </div>
+    
+    
+    </div>
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const urlInput = document.getElementById("url-input");
+      const imageInput = document.getElementById("image");
       const uploadButton = document.getElementById("upload-button");
 
-      
-      uploadButton.addEventListener("click", () => {
-        let imageUrl = urlInput.value;
+      uploadButton.addEventListener("click", async () => {
+        const selectedFile = imageInput.value;
 
-        if (imageUrl.trim() !== "") {
-          axios
-            .post("http://localhost:3000/", { imageUrl }) 
-            .then(function (response) {
-              console.log(JSON.stringify(response.data));
-              
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
+        if (selectedFile) {
+          const imageUrl = await uploadImage(selectedFile);
+          
         }
       });
-    })
+
+      async function uploadImage(file) {
+        const formData = new FormData();
+        formData.append("image", file);
+
+        try {
+          const response = await axios.post("http://localhost:3000/upload", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data"
+            }
+          });
+          return response.data.imageUrl;
+        } catch (error) {
+          console.error("Error uploading image:", error);
+        }
+      }
+
+    });
   </script>
 </body>
 </html>
