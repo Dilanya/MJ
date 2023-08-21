@@ -1,0 +1,78 @@
+{
+	"info": {
+		"_postman_id": "26c39fd7-91d7-493a-9998-712a7e46d81e",
+		"name": "mj",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26508435"
+	},
+	"item": [
+		{
+			"name": "upload",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "multipart/form-data",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/dilan/Downloads/activity 2.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/upload?prompt=sunset background realistic",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"upload"
+					],
+					"query": [
+						{
+							"key": "prompt",
+							"value": "sunset background realistic"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "webhook",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    data : https://www.gstatic.com/webp/gallery/4.webp\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/upload-image",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"upload-image"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
