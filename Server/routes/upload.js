@@ -28,16 +28,20 @@ router.post('/webhook', async (req, res) => {
 });
 
 
-
-// Configure storage for uploaded images
 const storage = multer.diskStorage({
-  destination: 'uploads/',
+  destination: (req, file, cb) => {
+      cb(null, 'uploads/'); 
+  },
   filename: (req, file, cb) => {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+      const timestamp = Date.now();
+      const extension = path.extname(file.originalname);
+      const filename = `image-${timestamp}${extension}`;
+      cb(null, filename);
   }
+  
 });
 
-// Initialize multer with storage configuration
+
 const upload = multer({ storage: storage });
 
 // Handle image upload
@@ -46,16 +50,13 @@ router.post('/upload', upload.single('image'), async (req, res) => {
     return res.status(400).send('No file uploaded.');
   }
   const hashId = uuid.v4(); 
-  const imageUrl = `${req.protocol}://${req.get('host')}/${req.file.path}`;
-  const userPrompt = req.query.prompt || ''; 
-
+  const fileName = req.file.filename; 
+  const imageUrl = `${req.protocol}://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`;
+  const userPrompt = req.body.prompt || ''; 
+  console.log('userPrompt:', userPrompt); 
   try {
-    // Save the customer's hash ID and image URL to the database
-    await saveImageToDatabase(hashId, imageUrl);
-
-    // Call external API
-    const postApiResponse = await callPostAPI(imageUrl, userPrompt);
     
+    const postApiResponse = await callPostAPI(imageUrl,hashId, fileName, userPrompt);
 
     res.send(postApiResponse);
   } catch (error) {
@@ -64,14 +65,14 @@ router.post('/upload', upload.single('image'), async (req, res) => {
   }
 });
 
-async function saveImageToDatabase(hashId, imageUrl) {
+async function saveImageToDatabase(hashId, fileName, userPrompt, messageId) {
   return new Promise((resolve, reject) => {
-    const query = 'INSERT INTO customers (hash_id, image_url) VALUES (?, ?)';
-    connection.query(query, [hashId, imageUrl], (err, results) => {
+    const query = 'INSERT INTO prompt (hash_ID, upload_Image, prompt, message_ID) VALUES (?, ?, ?, ?)';
+    connection.query(query, [hashId, fileName, userPrompt, messageId], (err, results) => {
       if (err) {
         reject(err);
       } else {
-        console.log('Image saved to the database');
+        console.log('Image and Message ID saved to the database');
         resolve();
       }
     });
@@ -79,13 +80,11 @@ async function saveImageToDatabase(hashId, imageUrl) {
 }
 
 
-
-
-function callPostAPI(imageUrl,userPrompt) {
+function callPostAPI(imageUrl,hashId, fileName, userPrompt) {
     const authToken = process.env.auth_token;
     const data = JSON.stringify({
       msg: imageUrl + ' ' + userPrompt,
-      ref: "",
+      ref: hashId,
       webhookOverride: "http://localhost:3000/webhook"
     });
   
@@ -101,12 +100,12 @@ function callPostAPI(imageUrl,userPrompt) {
   
     return axios(config)
     .then(response => {
-      console.log("POST Response:", response.data); // Log the raw POST response
+      console.log("POST Response:", response.data);
       const messageId = response.data.messageId;
-      return callGetAPI(messageId); // Call the GET API with the messageId
-    })
-    .catch(error => {
-      throw error;
+      return saveImageToDatabase(hashId, fileName, userPrompt, messageId)
+        .then(() => {
+          return callGetAPI(messageId);
+        });
     });
 }
 

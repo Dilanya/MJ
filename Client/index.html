@@ -12,7 +12,56 @@
       <div id="row">
         <label>
         <input type="file" name="image" id="image" accept="image/*" required>
-        <input type="text" name="prompt" placeholder="Optional prompt">
+        <input type="text" name="prompt" id="prompt" placeholder="Optional prompt">
+        <button type="submit" id="upload-button">Upload</button>
+        <div id="progressContainer" >
+          <p>Processing progress:</p>
+          <progress id="progressBar" value="0" max="100"></progress>
+          <p id="progressText">0%</p>
+        </div>
+        <div id="responseContainer" >
+          <p id="responseMessage"></p>
+          <img id="processedImage" src="" alt="Processed Image">
+          <p>Image URL: <span id="imageUrl"></span></p>
+        </div>
+      </div>
+    </form>
+    
+    
+    </div>
+
+  <script>
+    const uploadForm = document.getElementById("upload-form");
+    const responseMessage = document.getElementById("responseMessage");
+
+    uploadForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const formData = new FormData(uploadForm);
+      const response = await fetch("http://localhost:3000/upload", {
+        method: "POST",
+        body: formData
+      });
+      const data = await response.json();
+        
+    if (response.ok) {
+        document.getElementById("responseMessage").textContent = "Upload successful!";
+        console.log("Response:", data);
+    } else {
+        document.getElementById("responseMessage").textContent = "Upload failed.";
+        console.error("Error:", data.error);
+    }
+    });
+  </script>
+</body>
+<!--
+
+<body>
+  <div id="view">
+    <form id="upload-form">
+      <div id="row">
+        <label>
+        <input type="file" name="image" id="image" accept="image/*" required>
+        <input type="text" name="prompt" id="prompt" placeholder="Optional prompt">
         <button type="button" id="upload-button">Upload</button>
         <div id="progressContainer" >
           <p>Processing progress:</p>
@@ -29,7 +78,6 @@
     
     
     </div>
-
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -64,4 +112,5 @@
     });
   </script>
 </body>
+-->
 </html>

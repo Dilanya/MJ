@@ -17,6 +17,11 @@ body {
     
   }
 
+  #progressContainer{
+    text-align: center;
+    
+  }
+
   #view {
     display: flex;
     justify-content: center;
