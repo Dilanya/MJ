@@ -9,9 +9,12 @@ app.use(bodyParser.json());
 // Serve uploaded files statically
 app.use('/uploads', express.static('uploads'));
 
-// Import and use the routes from 'upload.js'
+
+
 const uploadRoutes = require('./routes/upload');
 app.use(uploadRoutes);
+const testRoute = require('./routes/test');
+app.use(testRoute);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
