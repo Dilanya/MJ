@@ -4,6 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const port = 3000;
 
+
 app.use(cors());
 app.use(bodyParser.json());
 // Serve uploaded files statically
