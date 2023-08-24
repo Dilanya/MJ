@@ -16,7 +16,7 @@ router.post('/webhook', async (req, res) => {
     console.log('Webhook Event:', eventData);
 
     if (eventData.progress === 100) {
-      const fullResponse = await callGetAPI(eventData.MessageId);
+      const fullResponse = await callGetAPI(eventData.messageId);
       res.status(200).json({ message: 'Webhook received and processed successfully', response: fullResponse });
     } else {
       res.status(200).json({ message: 'Webhook received', progress: eventData.progress });
