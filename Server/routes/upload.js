@@ -96,7 +96,9 @@ function callPostAPI(imageUrl,hashId, fileName, userPrompt) {
       url: "https://api.thenextleg.io/v2/imagine",
       headers: {
         Authorization: `Bearer ${authToken}`,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin':'*',
+        'Access-Control-Allow-Methods':'POST,PATCH,OPTIONS'
       },
       data: data
     };
