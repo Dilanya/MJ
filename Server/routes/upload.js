@@ -58,8 +58,8 @@ router.post('/upload', upload.single('image'), async (req, res) => {
   
   try {
     
-    //const postApiResponse = await callPostAPI(imageUrl,hashId, fileName, userPrompt);
-    const postApiResponse = await saveImageToDatabase(hashId, fileName, userPrompt)
+    const postApiResponse = await callPostAPI(imageUrl,hashId, fileName, userPrompt);
+    //const postApiResponse = await saveImageToDatabase(hashId, fileName, userPrompt)
     res.send(postApiResponse);
   } catch (error) {
     console.error('Error:', error);
