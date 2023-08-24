@@ -111,7 +111,7 @@ function callPostAPI(imageUrl,hashId, fileName, userPrompt) {
 }
 
 
-function callGetAPI(messageId) {
+function callGetAPI(messageId,hashId) {
   const authToken = process.env.auth_token; 
   const data = JSON.stringify({
     
