@@ -85,8 +85,8 @@ function callPostAPI(imageUrl,hashId, fileName, userPrompt) {
     const authToken = process.env.auth_token;
     const data = JSON.stringify({
       msg: imageUrl + ' ' + userPrompt,
-      //ref: hashId,
-      //webhookOverride: "https://india.roosterapps.online/webhook"
+      ref: hashId,
+      webhookOverride: "https://india.roosterapps.online/webhook"
     });
   
     const config = {
@@ -113,11 +113,7 @@ function callPostAPI(imageUrl,hashId, fileName, userPrompt) {
 
 function callGetAPI(messageId,hashId) {
   const authToken = process.env.auth_token; 
-  const data = JSON.stringify({
-    
-    ref: hashId,
-    webhookOverride: "https://india.roosterapps.online/webhook"
-  });
+  
   const config = {
     method: 'get',
     url: `https://api.thenextleg.io/v2/message/${messageId}`,
