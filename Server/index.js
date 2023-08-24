@@ -5,13 +5,13 @@ const bodyParser = require('body-parser');
 const port = 3000;
 
 
-
+app.use(cors());
 app.use(bodyParser.json());
 // Serve uploaded files statically
 app.use('/uploads', express.static('uploads'));
 
 
-app.use(cors());
+
 const uploadRoutes = require('./routes/upload');
 app.use(uploadRoutes);
 const testRoute = require('./routes/test');

@@ -16,7 +16,7 @@ router.post('/webhook', async (req, res) => {
     console.log('Webhook Event:', eventData);
 
     if (eventData.progress === 100) {
-      //const fullResponse = await callGetAPI(eventData.messageId);
+      
       res.status(200).json({ message: 'Webhook received and processed successfully', response: fullResponse });
     } else {
       res.status(200).json({ message: 'Webhook received', progress: eventData.progress });
@@ -57,8 +57,8 @@ router.post('/upload', upload.single('image'), async (req, res) => {
   
   try {
     
-    const postApiResponse = await callPostAPI(imageUrl,hashId, fileName, userPrompt);
-
+    //const postApiResponse = await callPostAPI(imageUrl,hashId, fileName, userPrompt);
+    const postApiResponse = await saveImageToDatabase(hashId, fileName, userPrompt)
     res.send(postApiResponse);
   } catch (error) {
     console.error('Error:', error);
@@ -106,29 +106,6 @@ function callPostAPI(imageUrl,hashId, fileName, userPrompt) {
       const messageId = response.data.messageId;
       return saveImageToDatabase(hashId, fileName, userPrompt, messageId)
         
-    });
-}
-
-
-function callGetAPI(messageId) {
-  const authToken = process.env.auth_token; 
-  
-  const config = {
-    method: 'get',
-    url: `https://api.thenextleg.io/v2/message/${messageId}`,
-    headers: {
-      Authorization: `Bearer ${authToken}`
-    },
-    
-  };
-
-  return axios(config)
-    .then(response => {
-      
-      return response.data; 
-    })
-    .catch(error => {
-      throw error;
     });
 }
 
