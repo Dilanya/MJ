@@ -16,7 +16,7 @@ router.post('/webhook', async (req, res) => {
     console.log('Webhook Event:', eventData);
 
     if (eventData.progress === 100) {
-      const fullResponse = await callGetAPI(eventData.messageId);
+      //const fullResponse = await callGetAPI(eventData.messageId);
       res.status(200).json({ message: 'Webhook received and processed successfully', response: fullResponse });
     } else {
       res.status(200).json({ message: 'Webhook received', progress: eventData.progress });
@@ -104,14 +104,12 @@ function callPostAPI(imageUrl,hashId, fileName, userPrompt) {
       console.log("POST Response:", response.data);
       const messageId = response.data.messageId;
       return saveImageToDatabase(hashId, fileName, userPrompt, messageId)
-        .then(() => {
-          return callGetAPI(messageId)
-        })
+        
     });
 }
 
 
-function callGetAPI(messageId,hashId) {
+function callGetAPI(messageId) {
   const authToken = process.env.auth_token; 
   
   const config = {
@@ -120,7 +118,7 @@ function callGetAPI(messageId,hashId) {
     headers: {
       Authorization: `Bearer ${authToken}`
     },
-    data : data
+    
   };
 
   return axios(config)
