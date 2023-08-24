@@ -39,7 +39,8 @@
       const formData = new FormData(uploadForm);
       const response = await fetch("https://india.roosterapps.online/upload", {
         method: "POST",
-        body: formData
+        body: formData,
+        
       });
       const data = await response.json();
         

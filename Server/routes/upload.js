@@ -46,7 +46,7 @@ const upload = multer({ storage: storage });
 
 // Handle image upload
 router.post('/upload', upload.single('image'), async (req, res) => {
-  res.header('Access-Control-Allow-Origin', '*');
+  
   if (!req.file) {
     return res.status(400).send('No file uploaded.');
   }
