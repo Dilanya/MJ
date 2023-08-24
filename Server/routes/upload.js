@@ -16,7 +16,7 @@ router.post('/webhook', async (req, res) => {
     console.log('Webhook Event:', eventData);
 
     if (eventData.progress === 100) {
-      const fullResponse = await callGetAPI(eventData.originatingMessageId);
+      const fullResponse = await callGetAPI(eventData.MessageId);
       res.status(200).json({ message: 'Webhook received and processed successfully', response: fullResponse });
     } else {
       res.status(200).json({ message: 'Webhook received', progress: eventData.progress });
@@ -104,7 +104,9 @@ function callPostAPI(imageUrl,hashId, fileName, userPrompt) {
       console.log("POST Response:", response.data);
       const messageId = response.data.messageId;
       return saveImageToDatabase(hashId, fileName, userPrompt, messageId)
-        
+        .then(() => {
+          return callGetAPI(messageId)
+        })
     });
 }
 
