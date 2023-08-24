@@ -85,8 +85,8 @@ function callPostAPI(imageUrl,hashId, fileName, userPrompt) {
     const authToken = process.env.auth_token;
     const data = JSON.stringify({
       msg: imageUrl + ' ' + userPrompt,
-      ref: hashId,
-      webhookOverride: "https://india.roosterapps.online/webhook"
+      //ref: hashId,
+      //webhookOverride: "https://india.roosterapps.online/webhook"
     });
   
     const config = {
