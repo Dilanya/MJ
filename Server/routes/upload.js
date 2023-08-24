@@ -52,8 +52,9 @@ router.post('/upload', upload.single('image'), async (req, res) => {
   const hashId = uuid.v4(); 
   const fileName = req.file.filename; 
   const imageUrl = `${req.protocol}://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`;
-  const userPrompt = req.body.prompt || ''; 
+  const userPrompt = req.body.prompt || req.query.prompt; 
   console.log('userPrompt:', userPrompt); 
+  
   try {
     
     const postApiResponse = await callPostAPI(imageUrl,hashId, fileName, userPrompt);
@@ -85,7 +86,7 @@ function callPostAPI(imageUrl,hashId, fileName, userPrompt) {
     const data = JSON.stringify({
       msg: imageUrl + ' ' + userPrompt,
       ref: hashId,
-      webhookOverride: "http://localhost:3000/webhook"
+      webhookOverride: "https://india.roosterapps.online/webhook"
     });
   
     const config = {
@@ -103,9 +104,7 @@ function callPostAPI(imageUrl,hashId, fileName, userPrompt) {
       console.log("POST Response:", response.data);
       const messageId = response.data.messageId;
       return saveImageToDatabase(hashId, fileName, userPrompt, messageId)
-        .then(() => {
-          return callGetAPI(messageId);
-        });
+        
     });
 }
 
