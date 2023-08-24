@@ -5,7 +5,6 @@ const connection = require('../connection')
 const uuid = require('uuid');
 const axios = require("axios");
 const dotenv = require('dotenv');
-const { Console } = require('console');
 const router = express.Router();
 dotenv.config();
 
@@ -96,9 +95,7 @@ function callPostAPI(imageUrl,hashId, fileName, userPrompt) {
       url: "https://api.thenextleg.io/v2/imagine",
       headers: {
         Authorization: `Bearer ${authToken}`,
-        "Content-Type": "application/json",
-        'Access-Control-Allow-Origin':'*',
-        'Access-Control-Allow-Methods':'POST,PATCH,OPTIONS'
+        "Content-Type": "application/json"
       },
       data: data
     };
