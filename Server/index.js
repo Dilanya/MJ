@@ -5,7 +5,9 @@ const bodyParser = require('body-parser');
 const port = 3000;
 
 
-app.use(cors());
+app.use(cors({
+  origin: 'https://pawlific-shop.myshopify.com'
+}));
 app.use(bodyParser.json());
 // Serve uploaded files statically
 app.use('/uploads', express.static('uploads'));
