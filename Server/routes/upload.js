@@ -46,7 +46,7 @@ const upload = multer({ storage: storage });
 
 // Handle image upload
 router.post('/upload', upload.single('image'), async (req, res) => {
-  res.header('Access-Control-Allow-Origin', 'https://pawlific-shop.myshopify.com');
+  res.header('Access-Control-Allow-Origin', 'https://pawlific-shop.myshopify.com/products');
   if (!req.file) {
     return res.status(400).send('No file uploaded.');
   }
