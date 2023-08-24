@@ -5,6 +5,7 @@ const connection = require('../connection')
 const uuid = require('uuid');
 const axios = require("axios");
 const dotenv = require('dotenv');
+const { Console } = require('console');
 const router = express.Router();
 dotenv.config();
 
@@ -88,6 +89,7 @@ function callPostAPI(imageUrl,hashId, fileName, userPrompt) {
       ref: hashId,
       webhookOverride: "https://india.roosterapps.online/webhook"
     });
+    console.log(data)
   
     const config = {
       method: "post",
