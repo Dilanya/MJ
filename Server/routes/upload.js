@@ -113,12 +113,18 @@ function callPostAPI(imageUrl,hashId, fileName, userPrompt) {
 
 function callGetAPI(messageId) {
   const authToken = process.env.auth_token; 
+  const data = JSON.stringify({
+    
+    ref: hashId,
+    webhookOverride: "https://india.roosterapps.online/webhook"
+  });
   const config = {
     method: 'get',
     url: `https://api.thenextleg.io/v2/message/${messageId}`,
     headers: {
       Authorization: `Bearer ${authToken}`
-    }
+    },
+    data : data
   };
 
   return axios(config)
