@@ -52,7 +52,7 @@ router.post('/upload', upload.single('image'), async (req, res) => {
   }
   const hashId = uuid.v4(); 
   const fileName = req.file.filename; 
-  const imageUrl = `${req.protocol}://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`;
+  const imageUrl = `https://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`;
   const userPrompt = req.body.prompt || req.query.prompt; 
   console.log('userPrompt:', userPrompt); 
   
@@ -101,7 +101,7 @@ function callPostAPI(imageUrl,hashId, fileName, userPrompt) {
       data: data
     };
   
-    return axios(config)
+     axios(config)
     .then(response => {
       console.log("POST Response:", response.data);
       const messageId = response.data.messageId;
