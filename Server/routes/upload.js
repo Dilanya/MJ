@@ -18,9 +18,9 @@ router.post('/webhook', async (req, res) => {
     if (eventData.progress === 100) {
 
       const imageUrls = eventData.imageUrls;
+      const serializedUrls = JSON.stringify(imageUrls);
       const insertQuery = 'INSERT INTO prompt (mj_Urls) VALUES ?';
-      const values = imageUrls.map(url => [url]);
-      connection.query(insertQuery, values, (err, results) => {
+      connection.query(insertQuery, serializedUrls, (err, results) => {
         if (err) {
           reject(err);
         } else {
