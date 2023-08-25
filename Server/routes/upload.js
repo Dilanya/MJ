@@ -14,7 +14,8 @@ router.post('/webhook', async (req, res) => {
   try {
     const eventData = req.body; // You can process the incoming data as needed
     const urls = req.body.imageUrls
-    console.log('Webhook Event:', eventData, urls);
+    console.log('Webhook Event:', eventData);
+    console.log('Webhook Event:', urls);
 
     if (eventData.progress === 100) {
 
