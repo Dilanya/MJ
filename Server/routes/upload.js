@@ -13,7 +13,8 @@ dotenv.config();
 router.post('/webhook', async (req, res) => {
   try {
     const eventData = req.body; // You can process the incoming data as needed
-    console.log('Webhook Event:', eventData);
+    const urls = req.body.imageUrls
+    console.log('Webhook Event:', eventData, urls);
 
     if (eventData.progress === 100) {
 
