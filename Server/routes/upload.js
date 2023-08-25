@@ -15,13 +15,8 @@ router.post('/webhook', async (req, res) => {
     const eventData = req.body; // You can process the incoming data as needed
     const urls = req.body.imageUrls
     console.log('Webhook Event:', eventData);
-    console.log('Webhook Event:', urls);
-
-    if (eventData.progress === 100) {
-
-      const imageUrls = eventData.imageUrls;
-      const serializedUrls = JSON.stringify(imageUrls);
-      console.log(imageUrls)
+    const serializedUrls = JSON.stringify(urls);
+      console.log(serializedUrls)
       const insertQuery = 'INSERT INTO prompt (mj_Urls) VALUES ?';
       connection.query(insertQuery, serializedUrls, (err, results) => {
         if (err) {
@@ -31,11 +26,7 @@ router.post('/webhook', async (req, res) => {
           resolve();
         }
       });
-      
-      res.status(200).json({ message: 'Webhook received and processed successfully', response: fullResponse });
-    } else {
-      res.status(200).json({ message: 'Webhook received', progress: eventData.progress });
-    }
+
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ error: 'An error occurred' });
