@@ -11,10 +11,16 @@ router.get('/generated-image/:hashId', async (req, res) => {
         console.error('Error:', err);
         res.status(500).json({ error: 'An error occurred' });
       } else {
+        
         if (results.length > 0) {
           const firstUrlArray = JSON.parse(results[0].mj_Urls);
-          const firstUrl = firstUrlArray[0];
-          res.status(200).json({ firstUrl });
+          if (Array.isArray(firstUrlArray) && firstUrlArray.length > 0) {
+            const firstUrl = firstUrlArray[0];
+            res.status(200).json({ firstUrl });
+          } else {
+            console.error("No URLs found or invalid data format.");
+          }
+          
         } else {
           res.status(404).json({ error: 'No data found' });
         }
