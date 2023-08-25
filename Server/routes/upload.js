@@ -17,9 +17,10 @@ router.post('/webhook', async (req, res) => {
     console.log('Webhook Event:', eventData);
     const serializedUrls = JSON.stringify(urls);
     console.log(serializedUrls)
+    const originatingMessageId = req.body.originatingMessageId;
     return new Promise((resolve, reject) => {
-      const insertQuery = 'INSERT INTO prompt (mj_Urls) VALUES (?)';
-      connection.query(insertQuery, [serializedUrls], (err, results) => {
+      const updateQuery = 'UPDATE prompt SET mj_Urls = ? WHERE message_ID = ?';
+      connection.query(updateQuery, [serializedUrls, originatingMessageId], (err, results) => {
         if (err) {
           reject(err);
         } else {
