@@ -4,8 +4,9 @@ const connection = require('../connection')
 
 router.get('/generated-image', async (req, res) => {
   try {
-    const selectQuery = 'SELECT mj_Urls FROM prompt LIMIT 1';
-    connection.query(selectQuery, (err, results) => {
+    const customerId = 1; 
+    const selectQuery = 'SELECT mj_Urls FROM prompt WHERE customer_Id = ? LIMIT 1';
+    connection.query(selectQuery, [customerId], (err, results) => {
       if (err) {
         console.error('Error:', err);
         res.status(500).json({ error: 'An error occurred' });
