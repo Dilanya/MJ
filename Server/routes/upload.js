@@ -62,11 +62,12 @@ router.post('/upload', upload.single('image'), async (req, res) => {
   const fileName = req.file.filename; 
   const imageUrl = `https://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`;
   const userPrompt = req.body.prompt || req.query.prompt; 
+  const customerId = 1;
   console.log('userPrompt:', userPrompt); 
   
   try {
     
-    const postApiResponse = await callPostAPI(imageUrl,hashId, fileName, userPrompt);
+    const postApiResponse = await callPostAPI(imageUrl,hashId, fileName, userPrompt, customerId);
     //const postApiResponse = await saveImageToDatabase(hashId, fileName, userPrompt)
     res.send(postApiResponse);
   } catch (error) {
@@ -75,10 +76,10 @@ router.post('/upload', upload.single('image'), async (req, res) => {
   }
 });
 
-async function saveImageToDatabase(hashId, fileName, userPrompt, messageId) {
+async function saveImageToDatabase(hashId, fileName, userPrompt, messageId, customerId) {
   return new Promise((resolve, reject) => {
-    const query = 'INSERT INTO prompt (hash_ID, upload_Image, prompt, message_ID) VALUES (?, ?, ?, ?)';
-    connection.query(query, [hashId, fileName, userPrompt, messageId], (err, results) => {
+    const query = 'INSERT INTO prompt (hash_ID, upload_Image, prompt, message_ID, customer_ID) VALUES (?, ?, ?, ?,?)';
+    connection.query(query, [hashId, fileName, userPrompt, messageId, customerId], (err, results) => {
       if (err) {
         reject(err);
       } else {
