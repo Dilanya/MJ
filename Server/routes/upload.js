@@ -76,10 +76,10 @@ router.post('/upload', upload.single('image'), async (req, res) => {
   }
 });
 
-async function saveImageToDatabase(hashId, fileName, userPrompt, messageId, customerId) {
+async function saveImageToDatabase(hashId, fileName, userPrompt, messageId) {
   return new Promise((resolve, reject) => {
     const query = 'INSERT INTO prompt (hash_ID, upload_Image, prompt, message_ID, customer_ID) VALUES (?, ?, ?, ?,?)';
-    connection.query(query, [hashId, fileName, userPrompt, messageId, customerId], (err, results) => {
+    connection.query(query, [hashId, fileName, userPrompt, messageId, 1], (err, results) => {
       if (err) {
         reject(err);
       } else {
