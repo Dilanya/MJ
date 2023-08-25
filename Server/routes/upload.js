@@ -16,6 +16,18 @@ router.post('/webhook', async (req, res) => {
     console.log('Webhook Event:', eventData);
 
     if (eventData.progress === 100) {
+
+      const imageUrls = eventData.imageUrls;
+      const insertQuery = 'INSERT INTO prompt (mj_Urls) VALUES ?';
+      const values = imageUrls.map(url => [url]);
+      connection.query(insertQuery, values, (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          console.log('Image and Message ID saved to the database');
+          resolve();
+        }
+      });
       
       res.status(200).json({ message: 'Webhook received and processed successfully', response: fullResponse });
     } else {

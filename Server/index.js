@@ -5,9 +5,14 @@ const bodyParser = require('body-parser');
 const port = 3000;
 
 
+const corsOptions = {
+  origin: '*', // Replace with your React app's URL
+  optionsSuccessStatus: 200,
+  credentials: true, // Enable cookies
+};
 
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
-app.use(cors());
  //Serve uploaded files statically
 app.use('/uploads', express.static('uploads'));
 
