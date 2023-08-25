@@ -2,11 +2,11 @@ const express = require('express');
 const router = express.Router();
 const connection = require('../connection')
 
-router.get('/generated-image', async (req, res) => {
+router.get('/generated-image/:hashId', async (req, res) => {
   try {
-    const customerId = 1; 
-    const selectQuery = 'SELECT mj_Urls FROM prompt WHERE customer_Id = ? LIMIT 1';
-    connection.query(selectQuery, [customerId], (err, results) => {
+    const hashId = req.params.hashId;
+    const selectQuery = 'SELECT mj_Urls FROM prompt WHERE hash_ID = ? LIMIT 1';
+    connection.query(selectQuery, [hashId], (err, results) => {
       if (err) {
         console.error('Error:', err);
         res.status(500).json({ error: 'An error occurred' });
