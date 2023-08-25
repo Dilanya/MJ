@@ -18,8 +18,8 @@ router.post('/webhook', async (req, res) => {
     const serializedUrls = JSON.stringify(urls);
     console.log(serializedUrls)
     return new Promise((resolve, reject) => {
-      const insertQuery = 'INSERT INTO prompt (mj_Urls) VALUES ?';
-      connection.query(insertQuery, serializedUrls, (err, results) => {
+      const insertQuery = 'INSERT INTO prompt (mj_Urls) VALUES (?)';
+      connection.query(insertQuery, [serializedUrls], (err, results) => {
         if (err) {
           reject(err);
         } else {
