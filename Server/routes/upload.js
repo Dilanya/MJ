@@ -16,7 +16,8 @@ router.post('/webhook', async (req, res) => {
     const urls = req.body.imageUrls
     console.log('Webhook Event:', eventData);
     const serializedUrls = JSON.stringify(urls);
-      console.log(serializedUrls)
+    console.log(serializedUrls)
+    return new Promise((resolve, reject) => {
       const insertQuery = 'INSERT INTO prompt (mj_Urls) VALUES ?';
       connection.query(insertQuery, serializedUrls, (err, results) => {
         if (err) {
@@ -26,7 +27,7 @@ router.post('/webhook', async (req, res) => {
           resolve();
         }
       });
-
+    });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ error: 'An error occurred' });
