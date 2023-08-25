@@ -22,6 +22,8 @@ const uploadRoutes = require('./routes/upload');
 app.use(uploadRoutes);
 const testRoute = require('./routes/test');
 app.use(testRoute);
+const getRoute = require('./routes/getData')
+app.use(getRoute)
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
