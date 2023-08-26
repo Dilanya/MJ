@@ -12,7 +12,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '10mb'}));
  //Serve uploaded files statically
 app.use('/uploads', express.static('uploads'));
 
