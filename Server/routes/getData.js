@@ -19,6 +19,7 @@ router.get('/generated-image/:hashId', async (req, res) => {
             res.status(200).json({ firstUrl });
           } else {
             console.error("No URLs found or invalid data format.");
+            res.status(502).json({ error: 'request timed out' });
           }
           
         } else {
