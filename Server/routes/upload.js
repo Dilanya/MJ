@@ -6,7 +6,6 @@ const uuid = require('uuid');
 const axios = require("axios");
 const dotenv = require('dotenv');
 const router = express.Router();
-const heicConvert = require('heic-convert');
 dotenv.config();
 
 
@@ -73,9 +72,9 @@ router.post('/upload', upload.single('image'), async (req, res) => {
   
   try {
     
-    const postApiResponse = await callPostAPI(imageUrl,hashId, fileName, userPrompt, customerId);
+    const postApiResponse = await callPostAPI(imageUrl,hashId, fileName, userPrompt);
     //const postApiResponse = await saveImageToDatabase(hashId, fileName, userPrompt)
-    res.send(postApiResponse);
+    //res.send(postApiResponse);
     res.status(200).json({ hashId });
   } catch (error) {
     console.error('Error:', error);
@@ -85,8 +84,8 @@ router.post('/upload', upload.single('image'), async (req, res) => {
 
 async function saveImageToDatabase(hashId, fileName, userPrompt, messageId) {
   return new Promise((resolve, reject) => {
-    const query = 'INSERT INTO prompt (hash_ID, upload_Image, prompt, message_ID, customer_ID) VALUES (?, ?, ?, ?,?)';
-    connection.query(query, [hashId, fileName, userPrompt, messageId, 1], (err, results) => {
+    const query = 'INSERT INTO prompt (hash_ID, upload_Image, prompt, message_ID ) VALUES (?, ?, ?, ?)';
+    connection.query(query, [hashId, fileName, userPrompt, messageId], (err, results) => {
       if (err) {
         reject(err);
       } else {
@@ -99,28 +98,12 @@ async function saveImageToDatabase(hashId, fileName, userPrompt, messageId) {
 
 
 function callPostAPI(imageUrl,hashId, fileName, userPrompt) {
-  if (fileName.endsWith('.heic')) {
-    const heicBuffer = fs.readFileSync(`uploads/${fileName}`);
-    const pngBuffer = await heicConvert({
-      buffer: heicBuffer,
-      format: 'PNG'
-    });
-    
-    const newFileName = fileName.replace('.heic', '.png');
-    fs.writeFileSync(`uploads/${newFileName}`, pngBuffer);
-    
-    data = JSON.stringify({
-      msg: `${imageUrl.replace('.heic', '.png')} ${userPrompt}`, // Update the URL to PNG
-      ref: hashId,
-      webhookOverride: "https://india.roosterapps.online/webhook"
-    });
-  } else {
-    data = JSON.stringify({
+    const authToken = process.env.auth_token;
+    const data = JSON.stringify({
       msg: imageUrl + ' ' + userPrompt,
       ref: hashId,
       webhookOverride: "https://india.roosterapps.online/webhook"
     });
-  }
     console.log(data)
   
     const config = {
