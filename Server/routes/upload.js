@@ -6,6 +6,8 @@ const uuid = require('uuid');
 const axios = require("axios");
 const dotenv = require('dotenv');
 const router = express.Router();
+const fs = require('fs');
+const heicConvert = require('heic-convert');
 dotenv.config();
 
 
@@ -97,15 +99,34 @@ async function saveImageToDatabase(hashId, fileName, userPrompt, messageId) {
 }
 
 
-function callPostAPI(imageUrl,hashId, fileName, userPrompt) {
+async function callPostAPI(imageUrl, hashId, fileName, userPrompt) {
+  try {
     const authToken = process.env.auth_token;
-    const data = JSON.stringify({
-      msg: imageUrl + ' ' + userPrompt,
-      ref: hashId,
-      webhookOverride: "https://india.roosterapps.online/webhook"
-    });
-    console.log(data)
+    let data;
   
+    if (fileName.endsWith('.heic')) {
+      const heicBuffer = fs.readFileSync(`uploads/${fileName}`);
+      const pngBuffer = await heicConvert({
+        buffer: heicBuffer,
+        format: 'PNG'
+      });
+    
+      const newFileName = fileName.replace('.heic', '.png');
+      fs.writeFileSync(`uploads/${newFileName}`, pngBuffer);
+    
+      data = JSON.stringify({
+        msg: `${imageUrl.replace('.heic', '.png')} ${userPrompt}`,
+        ref: hashId,
+        webhookOverride: "https://india.roosterapps.online/webhook"
+      });
+    } else {
+      data = JSON.stringify({
+        msg: imageUrl + ' ' + userPrompt,
+        ref: hashId,
+        webhookOverride: "https://india.roosterapps.online/webhook"
+      });
+    }
+
     const config = {
       method: "post",
       url: "https://api.thenextleg.io/v2/imagine",
@@ -116,13 +137,15 @@ function callPostAPI(imageUrl,hashId, fileName, userPrompt) {
       data: data
     };
   
-     axios(config)
-    .then(response => {
-      console.log("POST Response:", response.data);
-      const messageId = response.data.messageId;
-      return saveImageToDatabase(hashId, fileName, userPrompt, messageId)
-        
-    });
+    const response = await axios(config);
+    console.log("POST Response:", response.data);
+    const messageId = response.data.messageId;
+    await saveImageToDatabase(hashId, fileName, userPrompt, messageId);
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
 }
+
 
 module.exports = router;
