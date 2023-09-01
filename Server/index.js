@@ -6,9 +6,9 @@ const port = 3000;
 
 
 const corsOptions = {
-  origin: 'https://pawlific-shop.myshopify.com', // Replace with your React app's URL
+  origin: 'https://pawlific-shop.myshopify.com', 
   optionsSuccessStatus: 200,
-  credentials: true, // Enable cookies
+  credentials: true, 
 };
 
 app.use(cors(corsOptions));
@@ -17,13 +17,15 @@ app.use(bodyParser.json({limit: '10mb'}));
 app.use('/uploads', express.static('uploads'));
 
 
-
-const uploadRoutes = require('./routes/upload');
-app.use(uploadRoutes);
+const shopifyRoute = require('./routes/shopify');
+app.use(shopifyRoute);
+const uploadRoute = require('./routes/upload');
+app.use(uploadRoute);
 const testRoute = require('./routes/test');
 app.use(testRoute);
 const getRoute = require('./routes/getData')
-app.use(getRoute)
+app.use(getRoute);
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
