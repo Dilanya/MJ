@@ -4,6 +4,7 @@ const connection = require('../connection')
 
 router.post('/shopify-webhook', async (req, res) => {
   try {
+    console.log(req.body);
     const customerData = req.body;
     const customerId = customerData.id;
     const customerName = customerData.first_name +" " + customerData.last_name;
