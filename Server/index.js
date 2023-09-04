@@ -5,10 +5,21 @@ const bodyParser = require('body-parser');
 const port = 3000;
 
 
+const allowedOrigins = [
+  'https://pawlific-shop.myshopify.com',
+  'https://demo-mid-journey-api.myshopify.com'
+];
+
 const corsOptions = {
-  origin: 'https://pawlific-shop.myshopify.com', 
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   optionsSuccessStatus: 200,
-  credentials: true, 
+  credentials: true
 };
 
 app.use(cors(corsOptions));
